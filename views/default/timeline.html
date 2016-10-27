@@ -1,12 +1,30 @@
 {{extend 'layout.html'}}
 <h1>Olá {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
-{{=form}}<!-- Gera o formulário html para o objeto form-->
+{{=form.custom.begin}}<!-- Gera o formulário html para o objeto form-->
+<div class="form-group">
+    <div class="input-append">
+        {{form.elements('#post_corpo')[0]['_class']='form-control mensagem'}}
+        {{form.elements('#post_corpo')[0]['_placeholder']='O que ta pegando?'}}
+        {{=form.custom.widget.corpo}}
+    </div>
+    <div class="btn-postar">
+        {{=form.custom.submit}}
+    </div>
+
+</div>
+{{=form.custom.end}}
 <hr>
-<ul>
-    {{for post in posts:}}
-        <li>
-            {{=post.corpo}}<br><!-- mensagem-->
+<div class="container">
+{{for post in posts:}}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar) or URL('static', 'images/morrodobau.jpg')}}" alt="{{=post.created_by.nome}}" />
+            {{=post.created_by.first_name}} digou:
+        </div>
+        <div class="panel-body">
+            <p>{{=post.corpo}}</p><br>
             <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-        </li>
-    {{pass}}
-</ul>
+        </div>
+    </div>
+{{pass}}
+</div>
