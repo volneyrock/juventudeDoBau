@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+<h1>Olá {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
+{{=form}}<!-- Gera o formulário html para o objeto form-->
+<hr>
+<ul>
+    {{for post in posts:}}
+        <li>
+            {{=post.corpo}}<br><!-- mensagem-->
+            <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
+        </li>
+    {{pass}}
+</ul>
