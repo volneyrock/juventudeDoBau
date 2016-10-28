@@ -33,6 +33,11 @@ def timeline():
         return dict(posts=posts.as_list())# Garante formatação para json e xml
     return dict(form=form, posts=posts)
 
+@auth.requires_login()
+def amigos():
+    ## Seleciona todos os amigos aprovados.
+    amigos = db(Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="A")
+    return dict(amigos=amigos)
 
 def user():
     """
