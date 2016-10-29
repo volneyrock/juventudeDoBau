@@ -29,7 +29,8 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.menu = [
-    (T('Home'), False, URL('default', 'index'), [])
+    (T('Home'), False, URL('default', 'index'), []),
+    (T('Friends'), False, URL('default', 'amigos'), []),
 ]
 
 DEVELOPMENT_MENU = False

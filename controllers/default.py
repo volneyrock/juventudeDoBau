@@ -35,9 +35,12 @@ def timeline():
 
 @auth.requires_login()
 def amigos():
+    ##Seleciona pedidos de amizades
+    pendentes = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="P")).select()
     ## Seleciona todos os amigos aprovados.
-    amigos = db(Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="A")
-    return dict(amigos=amigos)
+    amigos = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="A")).select()
+        
+    return dict(pendentes=pendentes, amigos=amigos)
 
 def user():
     """
