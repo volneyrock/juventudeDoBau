@@ -39,8 +39,17 @@ def amigos():
     pendentes = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="P")).select()
     ## Seleciona todos os amigos aprovados.
     amigos = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="A")).select()
-        
+
     return dict(pendentes=pendentes, amigos=amigos)
+
+@auth.requires_login()
+def perfil():
+    user_id = request.vars.user_id
+    user = db(db.auth_user.id==user_id).select()
+    myposts = db(Post.autor==user_id).select(orderby=~Post.created_on)
+    add_amigo = A("Adicionar amigo", _class='btn btn-primary')
+
+    return dict(user=user, myposts=myposts, add_amigo=add_amigo)
 
 def user():
     """
