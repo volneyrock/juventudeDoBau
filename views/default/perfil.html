@@ -1,21 +1,14 @@
 {{extend 'layout.html'}}
-<h1>Olá {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
-{{=form.custom.begin}}<!-- Gera o formulário html para o objeto form-->
-<div class="form-group">
-    <div class="input-append">
-        {{form.elements('#post_corpo')[0]['_class']='form-control mensagem'}}
-        {{form.elements('#post_corpo')[0]['_placeholder']='O que ta pegando?'}}
-        {{=form.custom.widget.corpo}}
-    </div>
-    <div class="btn-postar">
-        {{=form.custom.submit}}
-    </div>
-
-</div>
-{{=form.custom.end}}
-<hr>
 <div class="container">
-{{for post in posts:}}
+<div class="">
+    <h3>{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
+    <img class="responsive-img imagem-perfil" src="{{=URL('download', args=user[0].avatar)}}" alt="" />
+    {{if user[0].id != auth.user_id:}}
+        {{=add_amigo}}
+    {{pass}}
+</div>
+<br>
+{{for post in myposts:}}
     <div class="panel panel-default">
         <div class="panel-heading">
             <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar) or URL('static', 'images/morrodobau.jpg')}}" alt="{{=post.created_by.nome}}" />
