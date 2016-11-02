@@ -18,7 +18,7 @@
 {{for post in posts:}}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar) or URL('static', 'images/morrodobau.jpg')}}" alt="{{=post.created_by.nome}}" />
+            <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}" />
             <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
         </div>
         <div class="panel-body">

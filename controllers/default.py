@@ -47,9 +47,12 @@ def perfil():
     user_id = request.vars.user_id
     user = db(db.auth_user.id==user_id).select()
     myposts = db(Post.autor==user_id).select(orderby=~Post.created_on)
+    pendente = [i.situacao for i in db((Amigos.solicitante==auth.user_id) & (Amigos.solicitado==user_id) & (Amigos.situacao=="P")).select(Amigos.situacao)]
+    if pendente == []:
+        pendente.append("Nada")
     add_amigo = A("Adicionar amigo", _class='btn btn-primary')
 
-    return dict(user=user, myposts=myposts, add_amigo=add_amigo)
+    return dict(user=user, myposts=myposts, add_amigo=add_amigo, pendente=pendente)
 
 def user():
     """
