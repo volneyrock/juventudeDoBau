@@ -6,7 +6,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 
 response.logo = A(B('Juventude', SPAN('Do'), 'Baú'), XML('&trade;&nbsp;'),
-                  _class="navbar-brand", _href="#",
+                  _class="navbar-brand", _href="{{=URL('default', 'index')}}",
                   _id="juventude-logo")
 response.title = request.application.replace('_', ' ').title()
 response.subtitle = ''
