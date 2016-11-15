@@ -4,3 +4,10 @@
 .imagem-perfil{
     height: 150px;
 }
+
+.mythumb{
+	height: 130px;
+	max-height: 100%;
+	max-width: 100%;
+	padding-top: 2px;
+}
