@@ -3,11 +3,7 @@
 <div class="">
     <h3>{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
     <img class="responsive-img imagem-perfil" src="{{=URL('download', args=user[0].avatar)}}" alt="" />
-    {{if pendente[0]=="P":}}
-        <a class="btn btn-primary disabled" href="#">Pedido de amizade pendente</a>
-    {{elif user[0].id != auth.user_id:}}
-        {{=add_amigo}}
-    {{pass}}
+    {{=add_amigo}}
 </div>
 <br>
 {{for post in myposts:}}

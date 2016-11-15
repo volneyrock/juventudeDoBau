@@ -35,24 +35,37 @@ def timeline():
 
 @auth.requires_login()
 def amigos():
-    ##Seleciona pedidos de amizades
-    pendentes = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="P")).select()
+    ##Seleciona pedidos de amizade enviados ao usuário logado
+    convites = db((Amigos.solicitado==auth.user_id) & (Amigos.situacao=="P")).select()
+    ##Seleciona todos os pedidos de amizade pendentes
+    pendentes = db(((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id)) & (Amigos.situacao=="P")).select()
     ## Seleciona todos os amigos aprovados.
-    amigos = db((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id) & (Amigos.situacao=="A")).select()
+    amigos = db(((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id)) & (Amigos.situacao=="A")).select()
 
-    return dict(pendentes=pendentes, amigos=amigos)
+    return dict(convites=convites, amigos=amigos)
 
 @auth.requires_login()
 def perfil():
     user_id = request.vars.user_id
     user = db(db.auth_user.id==user_id).select()
     myposts = db(Post.autor==user_id).select(orderby=~Post.created_on)
-    pendente = [i.situacao for i in db((Amigos.solicitante==auth.user_id) & (Amigos.solicitado==user_id) & (Amigos.situacao=="P")).select(Amigos.situacao)]
-    if pendente == []:
-        pendente.append("Nada")
-    add_amigo = A("Adicionar amigo", _class='btn btn-primary')
+    situacao = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & ((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id))).select()
+    if user[0].id == auth.user_id: # Se for eu mesmo
+        add_amigo = ''
+    elif not situacao: # Se não houver solicitações
+        add_amigo = A("Adicionar amigo", _class='btn btn-primary', _href=URL(r=request, c='default', f='add_amigo', vars={'user_id':user_id}))
+    elif situacao[0].situacao == "A": # Se já for amigo
+        add_amigo = A("Amigos", _class='btn btn-primary disabled')
+    elif situacao[0].situacao == "P": # Se tiver pedido pendente
+        add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary disabled')
+    
+    return dict(user=user, myposts=myposts, add_amigo = add_amigo)
 
-    return dict(user=user, myposts=myposts, add_amigo=add_amigo, pendente=pendente)
+@auth.requires_login()
+def add_amigo():
+    convidado = request.vars.user_id
+    Amigos.insert(solicitante=auth.user_id, solicitado=convidado)
+    redirect(URL('perfil', vars={'user_id':convidado}))
 
 def user():
     """
@@ -90,3 +103,10 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+
+def aceitar_amigo():
+    solicitante = request.vars.user_id
+    db((Amigos.solicitante == solicitante) & (Amigos.solicitado == auth.user_id)).update(situacao='A')
+    session.flash = "Amizade aceita"
+    redirect(URL('amigos'))
+

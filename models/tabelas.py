@@ -14,4 +14,3 @@ Amigos = db.define_table('amigos',
             Field('solicitado', 'reference auth_user'),
             Field('situacao', 'string', default = 'P'),
             auth.signature)
-## Validadores para amigos
