@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Pedidos de amizade pendentes</h3>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <tr>
+          <th>Nome</th>
+          <th>Aceitar?</th>
+      </tr>
+      {{for user in convites:}}
+      <tr>
+          <td><a href="{{=URL('perfil', vars={'user_id':user.solicitante.id})}}">{{="%(first_name)s %(last_name)s" %user.solicitante}}</a></td>
+          <td><a class= "btn btn-primary btn-sm" href="{{=URL('default', 'aceitar_amigo', vars={'user_id':user.solicitante.id})}}">Aceitar</a> <a class= "btn btn-danger btn-sm" href="#">Recusar</a></td>
+      </tr>
+      {{pass}}
+    </table>
+  </div>
+</div>
+
+
+<div class="row corpo" >
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Meus Amigos</h3>
+    </div>
+  
+    {{ for a in amigos: }}
+      {{if a.solicitante == auth.user_id:}}
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <div class="thumbBlock">
+            <a href="{{=URL('perfil', vars={'user_id':a.solicitado.id})}}" target="_blank">
+              <img class='mythumb responsive-img' src="{{=URL('download', args=a.solicitado.avatar)}}" alt="" />
+              <p class = 'texto'>{{="%(first_name)s %(last_name)s" %a.solicitado}}</p>
+            </a>               
+          </div>
+        </div>
+      {{else:}}
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          <div class ="thumbBlock">
+            <a href="{{=URL('perfil', vars={'user_id':a.solicitante.id})}}" target="_blank">
+              <img class='mythumb responsive-img' src="{{=URL('download', args=a.solicitante.avatar)}}" alt="" />
+              <p class = 'texto'>{{="%(first_name)s %(last_name)s" %a.solicitante}}</p>
+            </a>
+          </div>
+        </div>
+      {{pass}}
+    {{pass}}
+  </div>  
+</div> 
