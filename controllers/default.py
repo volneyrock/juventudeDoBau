@@ -31,6 +31,7 @@ def timeline():
     posts = db(Post).select(orderby=~Post.created_on) # Seleciona todos posts ordenados por data de criação
     if request.extension in ['json', 'xml']:
         return dict(posts=posts.as_list())# Garante formatação para json e xml
+        
     return dict(form=form, posts=posts)
 
 @auth.requires_login()
@@ -109,4 +110,3 @@ def aceitar_amigo():
     db((Amigos.solicitante == solicitante) & (Amigos.solicitado == auth.user_id)).update(situacao='A')
     session.flash = "Amizade aceita"
     redirect(URL('amigos'))
-
