@@ -8,6 +8,7 @@
 # - download is for downloading files uploaded in the db (does streaming)
 # -------------------------------------------------------------------------
 
+
 @auth.requires_login()
 def index():
     """
@@ -21,6 +22,7 @@ def index():
     response.flash = T("Hello World")
     return dict(message=T('Welcome to web2py!'))
 
+
 @auth.requires_login()
 def timeline():
     Post.autor.default = auth.user_id # Define o usuário logado como padrão para postagens
@@ -31,8 +33,25 @@ def timeline():
     posts = db(Post).select(orderby=~Post.created_on) # Seleciona todos posts ordenados por data de criação
     if request.extension in ['json', 'xml']:
         return dict(posts=posts.as_list())# Garante formatação para json e xml
-        
-    return dict(form=form, posts=posts)
+
+    comentarios =  db(Post.id==Comments.post).select(Post.id)
+    return dict(form=form, posts=posts, comentarios=comentarios)
+
+
+@auth.requires_login()
+def post():
+    post_id = request.args(0)
+    post = db(Post.id == post_id).select().first()
+    comments = db(Comments.post == post_id).select()
+    form = SQLFORM(Comments, submit_button="Comentar", fields=['comentario']) # Formulário comentar
+    form.vars.post = post_id
+    if form.process().accepted:
+        response.flash = "Mensagem postada com sucesso :)"
+        redirect(URL('default', 'post', args=post_id))
+    elif form.errors:
+        response.flash = form.errors
+    return dict(post=post, comments=comments, form=form)
+
 
 @auth.requires_login()
 def amigos():
@@ -44,6 +63,7 @@ def amigos():
     amigos = db(((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id)) & (Amigos.situacao=="A")).select()
 
     return dict(convites=convites, amigos=amigos)
+
 
 @auth.requires_login()
 def perfil():
@@ -59,14 +79,16 @@ def perfil():
         add_amigo = A("Amigos", _class='btn btn-primary disabled')
     elif situacao[0].situacao == "P": # Se tiver pedido pendente
         add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary disabled')
-    
+
     return dict(user=user, myposts=myposts, add_amigo = add_amigo)
+
 
 @auth.requires_login()
 def add_amigo():
     convidado = request.vars.user_id
     Amigos.insert(solicitante=auth.user_id, solicitado=convidado)
     redirect(URL('perfil', vars={'user_id':convidado}))
+
 
 def user():
     """
@@ -105,8 +127,15 @@ def call():
     """
     return service()
 
+
 def aceitar_amigo():
     solicitante = request.vars.user_id
     db((Amigos.solicitante == solicitante) & (Amigos.solicitado == auth.user_id)).update(situacao='A')
     session.flash = "Amizade aceita"
     redirect(URL('amigos'))
+
+def curtir():
+    post = db(Post.id == request.vars.id).select().first()
+    new_likes = post.curtir + 1
+    post.update_record(curtir=new_likes)
+    return str(new_likes)

@@ -1,0 +1,37 @@
+{{extend 'layout.html'}}
+<div class="panel panel-default col-xs-12 col-sm-8 col-sm-offset-2">
+  <div class="panel-body">
+    <div class="media-left">
+        <img class="media-object" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=T('User avatar')}}" height="64" width="64">
+    </div>
+    <div class="media-body">
+      <h2 class="media-heading"><small>{{=post.created_by.first_name}} {{=post.created_by.last_name}} digou:</small></h2>
+      <p>{{=XML(post.corpo)}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="col-xs-12 col-sm-8 col-sm-offset-2">
+<h2>{{=T("Comments")}} <span class="badge">{{=len(comments)}}</span></h2>
+{{for comment in comments:}}
+<div class="media panel panel-default" style="padding: 15px;">
+  <div class="media-left">
+      <img class="media-object" src="{{=URL('download', args=comment.created_by.avatar)}}" alt="{{=T('User avatar')}}" height="64" width="64">
+  </div>
+  <div class="media-body">
+    <h4 class="media-heading">{{=comment.created_by.first_name}} {{=comment.created_by.last_name}} {{=T('digou')}}:</h4>
+    <p>{{=XML(comment.comentario)}}</p>
+  </div>
+</div>
+{{pass}}
+<br>
+</div>
+
+<div class="panel panel-default col-xs-12 col-sm-8 col-sm-offset-2">
+  <div class="panel-body">
+    <h3>{{=T("Reply this user")}}</h3>
+    {{=form}}
+  </div>
+</div>
