@@ -1,4 +1,4 @@
 # juventudeDoBau
 
-Pode sere testado em:
+Pode ser testado em:
 https://volneyrock.pythonanywhere.com/juventudeDOBau/
