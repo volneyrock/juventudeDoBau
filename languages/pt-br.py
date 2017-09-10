@@ -86,7 +86,7 @@
 'First name': 'Nome',
 'Forms and Validators': 'Formulários e Validadores',
 'Free Applications': 'Aplicações gratuitas',
-'Friends': 'Amigos',
+'Friends': 'Ajuntamentos',
 'Group ID': 'ID do Grupo',
 'Group uniquely assigned to user %(id)s': 'Group uniquely assigned to user %(id)s',
 'Groups': 'Grupos',

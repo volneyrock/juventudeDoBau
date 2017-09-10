@@ -8,6 +8,8 @@
       <h2 class="media-heading"><small>{{=post.created_by.first_name}} {{=post.created_by.last_name}} digou:</small></h2>
       <p>Pontos:{{=post.pontos}}</p>
       <p>{{=XML(post.corpo)}}</p>
+      <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
+      <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
     </div>
   </div>
 </div>

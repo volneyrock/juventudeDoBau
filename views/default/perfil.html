@@ -22,12 +22,7 @@
         <div class="panel-body">
             <p>{{=post.corpo}}</p><br>
             <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-            <p>Pontos:{{=post.pontos}}</p>
-            {{if post.id in votos:}}
-              [<spam id='post{{=post.id}}' class='like'>Curtiu</spam>]
-            {{else:}}
-              [<spam id='post{{=post.id}}' class='like' onclick="ajax('{{=URL('default', 'curtir', vars={'id':post.id, 'voto':'legal'})}}', ['id'], 'post{{=post.id}}');">Curtir</spam>]
-            {{pass}}
+            <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
         </div>
     </div>
 {{pass}}

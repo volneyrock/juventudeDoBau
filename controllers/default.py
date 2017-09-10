@@ -25,12 +25,26 @@ def index():
 
 @auth.requires_login()
 def timeline():
+    #Se não for informado, redirecionar para página 1
+    try:
+        pagina = int(request.vars.pagina)
+    except TypeError:
+        redirect(URL('default', 'timeline', vars={'pagina':1}))
+
     Post.autor.default = auth.user_id # Define o usuário logado como padrão para postagens
     Post.autor.writable = Post.autor.readable = False # Altera proteção de acesso ao campo autor
     form = SQLFORM(Post, submit_button="Postar") # Formulário postar
     if form.process().accepted:
         response.flash = "Mensagem postada com sucesso :)"
-    posts = db(Post).select(orderby=~Post.pontos) # Seleciona todos posts ordenados por data de criação
+
+    # posts = db(Post).select(orderby=~Post.pontos) # Seleciona todos posts ordenados por data de criação
+
+    posts = consultaComPaginacao(
+                    consulta=db(Post),
+                    pagina=pagina,
+                    paginacao=10,
+                    filtros={'orderby':~Post.pontos},
+                )
     if request.extension in ['json', 'xml']:
         return dict(posts=posts.as_list())# Garante formatação para json e xml
 
@@ -163,10 +177,9 @@ def curtir():
             db(Post.id==post).update(pontos=pontos)
             redirect(URL('default', 'curtir', vars={'id':post}))
 
-
     return dict(pontos=pontos, form=form)
 
-def pontos():
-    post_id = request.vars.id
-    pontos = db(Reacts.post == post_id).count()
-    return str(pontos)
+# def pontos():
+#     post_id = request.vars.id
+#     pontos = db(Reacts.post == post_id).count()
+#     return str(pontos)

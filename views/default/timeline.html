@@ -4,7 +4,7 @@
 <div class="form-group">
     <div class="input-append">
         {{form.elements('#post_corpo')[0]['_class']='form-control mensagem'}}
-        {{form.elements('#post_corpo')[0]['_placeholder']='O que ta pegando?'}}
+        {{form.elements('#post_corpo')[0]['_placeholder']='O que ta pegando %(first_name)s ?' %auth.user}}
         {{=form.custom.widget.corpo}}
     </div>
     <div class="btn-postar">
@@ -15,7 +15,7 @@
 {{=form.custom.end}}
 <hr>
 <div class="container">
-{{for post in posts:}}
+{{for post in posts[0]:}}
     <div class="panel panel-default">
         <div class="panel-heading">
             <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}" />
@@ -35,4 +35,13 @@
         </div>
     </div>
 {{pass}}
+<div class="pager">
+  {{if int(request.vars.pagina) != 1:}}
+    <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
+  {{pass}}
+  {{if int(request.vars.pagina) < posts[2]/10.0:}}
+    <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
+  {{pass}}
+</div>
+
 </div>
