@@ -30,6 +30,7 @@ response.google_analytics_id = None
 
 response.menu = [
     (T('Home'), False, URL('default', 'index'), []),
+    (T('News'), False, URL('default', 'novos'), []),
     (T('Friends'), False, URL('default', 'amigos'), []),
 ]
 

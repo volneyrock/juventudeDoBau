@@ -37,13 +37,11 @@ def timeline():
     if form.process().accepted:
         response.flash = "Mensagem postada com sucesso :)"
 
-    # posts = db(Post).select(orderby=~Post.pontos) # Seleciona todos posts ordenados por data de criação
-
     posts = consultaComPaginacao(
                     consulta=db(Post),
                     pagina=pagina,
                     paginacao=10,
-                    filtros={'orderby':~Post.pontos},
+                    filtros={'orderby':~Post.pontos|~Post.created_on},
                 )
     if request.extension in ['json', 'xml']:
         return dict(posts=posts.as_list())# Garante formatação para json e xml
@@ -51,6 +49,27 @@ def timeline():
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
     return dict(form=form, posts=posts, comentarios=comentarios, votos=votos)
+
+@auth.requires_login()
+def novos():
+    #Se não for informado, redirecionar para página 1
+    try:
+        pagina = int(request.vars.pagina)
+    except TypeError:
+        redirect(URL('default', 'novos', vars={'pagina':1}))
+
+    posts = consultaComPaginacao(
+                    consulta=db(Post),
+                    pagina=pagina,
+                    paginacao=10,
+                    filtros={'orderby':~Post.created_on},
+                )
+    if request.extension in ['json', 'xml']:
+        return dict(posts=posts.as_list())# Garante formatação para json e xml
+
+    comentarios =  db(Post.id==Comments.post).select(Post.id)
+    votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+    return dict(posts=posts, comentarios=comentarios, votos=votos)
 
 
 @auth.requires_login()

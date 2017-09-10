@@ -132,6 +132,7 @@
 'Name': 'Nome',
 'New Record': 'Novo Registro',
 'new record inserted': 'novo registro inserido',
+'News': 'Novos',
 'next 100 rows': 'próximas 100 linhas',
 'No databases in this application': 'Não há bancos de dados nesta aplicação',
 'Object or table name': 'Nome do objeto do da tabela',
