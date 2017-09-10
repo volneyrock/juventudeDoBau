@@ -1,5 +1,5 @@
 {{extend 'layout.html'}}
-<h1>Olá {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
+<h1>Olar {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
 {{=form.custom.begin}}<!-- Gera o formulário html para o objeto form-->
 <div class="form-group">
     <div class="input-append">
@@ -31,8 +31,12 @@
         <div class="panel-body">
             <p>{{=post.corpo}}</p><br>
             <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-            <!-- <p id='post{{=post.id}}'>{{=post.curtir}} curtidas</p>
-            [<spam class='like' onclick="ajax('{{=URL('default', 'curtir', vars={'id':post.id})}}', ['id'], 'post{{=post.id}}');">Curtir</spam>] -->
+            <p>Pontos:{{=post.pontos}}</p>
+            {{if post.id in votos:}}
+              [<spam id='post{{=post.id}}' class='like'>Curtiu</spam>]
+            {{else:}}
+              [<spam id='post{{=post.id}}' class='like' onclick="ajax('{{=URL('default', 'curtir', vars={'id':post.id, 'voto':'legal'})}}', ['id'], 'post{{=post.id}}');">Curtir</spam>]
+            {{pass}}
         </div>
     </div>
 {{pass}}

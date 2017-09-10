@@ -11,10 +11,23 @@
         <div class="panel-heading">
             <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar) or URL('static', 'images/morrodobau.jpg')}}" alt="{{=post.created_by.nome}}" />
             <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
+            {{n_comments = 0}}
+            {{for c in comentarios:}}
+              {{if c.id == post.id:}}
+                {{n_comments += 1}}
+              {{pass}}
+            {{pass}}
+            <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
         </div>
         <div class="panel-body">
             <p>{{=post.corpo}}</p><br>
             <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
+            <p>Pontos:{{=post.pontos}}</p>
+            {{if post.id in votos:}}
+              [<spam id='post{{=post.id}}' class='like'>Curtiu</spam>]
+            {{else:}}
+              [<spam id='post{{=post.id}}' class='like' onclick="ajax('{{=URL('default', 'curtir', vars={'id':post.id, 'voto':'legal'})}}', ['id'], 'post{{=post.id}}');">Curtir</spam>]
+            {{pass}}
         </div>
     </div>
 {{pass}}

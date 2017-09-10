@@ -30,12 +30,13 @@ def timeline():
     form = SQLFORM(Post, submit_button="Postar") # Formulário postar
     if form.process().accepted:
         response.flash = "Mensagem postada com sucesso :)"
-    posts = db(Post).select(orderby=~Post.created_on) # Seleciona todos posts ordenados por data de criação
+    posts = db(Post).select(orderby=~Post.pontos) # Seleciona todos posts ordenados por data de criação
     if request.extension in ['json', 'xml']:
         return dict(posts=posts.as_list())# Garante formatação para json e xml
 
     comentarios =  db(Post.id==Comments.post).select(Post.id)
-    return dict(form=form, posts=posts, comentarios=comentarios)
+    votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+    return dict(form=form, posts=posts, comentarios=comentarios, votos=votos)
 
 
 @auth.requires_login()
@@ -69,7 +70,10 @@ def amigos():
 def perfil():
     user_id = request.vars.user_id
     user = db(db.auth_user.id==user_id).select()
-    myposts = db(Post.autor==user_id).select(orderby=~Post.created_on)
+    myposts = db(Post.autor==user_id).select(orderby=~Post.pontos)
+    comentarios =  db(Post.id==Comments.post).select(Post.id)
+    votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+
     situacao = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & ((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id))).select()
     if user[0].id == auth.user_id: # Se for eu mesmo
         add_amigo = ''
@@ -80,7 +84,7 @@ def perfil():
     elif situacao[0].situacao == "P": # Se tiver pedido pendente
         add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary disabled')
 
-    return dict(user=user, myposts=myposts, add_amigo = add_amigo)
+    return dict(user=user, myposts=myposts, add_amigo=add_amigo, comentarios=comentarios, votos=votos)
 
 
 @auth.requires_login()
@@ -135,7 +139,9 @@ def aceitar_amigo():
     redirect(URL('amigos'))
 
 def curtir():
-    post = db(Post.id == request.vars.id).select().first()
-    new_likes = post.curtir + 1
-    post.update_record(curtir=new_likes)
-    return str(new_likes)
+    post = db(Post.id == request.vars.id).select().first()['id']
+    react = request.vars.voto
+    Reacts.insert(post=post, jovem=auth.user_id, react=react)
+    pontos = db(Reacts.post == post).count()
+    db(Post.id==post).update(pontos=pontos)
+    return str('Curtiu')
