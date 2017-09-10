@@ -1,0 +1,4 @@
+<h5>Pontos: {{=pontos}}</h5>
+{{=form.custom.begin}}
+{{=form.custom.submit}}
+{{=form.custom.end}}

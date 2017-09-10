@@ -139,9 +139,34 @@ def aceitar_amigo():
     redirect(URL('amigos'))
 
 def curtir():
-    post = db(Post.id == request.vars.id).select().first()['id']
+    post = request.vars.id
     react = request.vars.voto
-    Reacts.insert(post=post, jovem=auth.user_id, react=react)
     pontos = db(Reacts.post == post).count()
-    db(Post.id==post).update(pontos=pontos)
-    return str('Curtiu')
+    votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+
+    form1 = SQLFORM.factory(submit_button="Curtir")
+    form2 = SQLFORM.factory(submit_button="Descurtir")
+    form1.custom.submit.update(_class='btn-info')
+    form2.custom.submit.update(_class='btn-danger')
+    if int(post) in votos:
+        form = form2
+        if form.process().accepted:
+            db((Reacts.post==post)&(Reacts.jovem==auth.user_id)).delete()
+            pontos = db(Reacts.post == post).count()
+            db(Post.id==post).update(pontos=pontos)
+            redirect(URL('default', 'curtir', vars={'id':post}))
+    else:
+        form =form1
+        if form.process().accepted:
+            Reacts.insert(post=post, jovem=auth.user_id, react=react)
+            pontos = db(Reacts.post == post).count()
+            db(Post.id==post).update(pontos=pontos)
+            redirect(URL('default', 'curtir', vars={'id':post}))
+
+
+    return dict(pontos=pontos, form=form)
+
+def pontos():
+    post_id = request.vars.id
+    pontos = db(Reacts.post == post_id).count()
+    return str(pontos)
