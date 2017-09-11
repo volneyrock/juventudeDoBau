@@ -1,17 +1,14 @@
 {{extend 'layout.html'}}
-<div class="panel panel-default col-xs-12 col-sm-8 col-sm-offset-2">
-  <div class="panel-body">
-    <div class="media-left">
-        <img class="media-object" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=T('User avatar')}}" height="64" width="64">
+<div class="panel panel-defaul">
+    <div class="panel-heading">
+        <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}" />
+        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
     </div>
-    <div class="media-body">
-      <h2 class="media-heading"><small>{{=post.created_by.first_name}} {{=post.created_by.last_name}} digou:</small></h2>
-      <p>Pontos:{{=post.pontos}}</p>
-      <p>{{=XML(post.corpo)}}</p>
+    <div class="panel-body">
+      {{=DIV(MARKMIN(post.corpo), _class='post-body')}}<br>
       <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
       <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
     </div>
-  </div>
 </div>
 
 <div class="clearfix"></div>
