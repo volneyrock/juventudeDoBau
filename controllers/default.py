@@ -103,7 +103,7 @@ def amigos():
 def perfil():
     user_id = request.vars.user_id
     user = db(db.auth_user.id==user_id).select()
-    myposts = db(Post.autor==user_id).select(orderby=~Post.pontos)
+    myposts = db(Post.autor==user_id).select(orderby=~Post.pontos|~Post.created_on)
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
 

@@ -14,7 +14,7 @@
 </div>
 {{=form.custom.end}}
 <hr>
-<div class="container">
+<div class="container" onload=>
 {{for post in posts[0]:}}
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -29,7 +29,7 @@
             <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
         </div>
         <div class="panel-body">
-            <p>{{=post.corpo}}</p><br>
+            {{=DIV(MARKMIN(post.corpo), _class='post-body')}}<br>
             <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
             <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
         </div>

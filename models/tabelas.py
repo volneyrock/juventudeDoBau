@@ -6,8 +6,8 @@ Post = db.define_table('post',
     auth.signature # Campos para auditoria de registros
 )
 ## Validadores para Post
-Post.corpo.requires = [IS_NOT_EMPTY(error_message="Campo obrigatório"),
-    IS_LENGTH(140)]
+Post.corpo.requires = [IS_NOT_EMPTY(error_message="Campo obrigatório"),]
+    # IS_LENGTH(140)
 
 Reacts = db.define_table('reacts',
     Field('post', 'reference post'),
