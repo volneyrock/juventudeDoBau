@@ -18,6 +18,7 @@ if request.global_settings.web2py_version < "2.14.1":
 # app configuration made easy. Look inside private/appconfig.ini
 # -------------------------------------------------------------------------
 from gluon.contrib.appconfig import AppConfig
+import os
 
 # -------------------------------------------------------------------------
 # once in production, remove reload=True to gain full speed
@@ -73,10 +74,12 @@ auth.settings.extra_fields['auth_user'] = [
     Field('avatar', 'upload'),
     ]
 
+
 # -------------------------------------------------------------------------
 # create all tables needed by auth if not custom tables
 # -------------------------------------------------------------------------
 auth.define_tables(username=False, signature=False)
+db.auth_user.avatar.default = os.path.join(request.folder, 'static', 'images', 'defaultUpload.jpg')
 
 # -------------------------------------------------------------------------
 # configure email
