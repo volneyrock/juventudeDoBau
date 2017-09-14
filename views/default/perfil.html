@@ -1,83 +1,110 @@
-{{left_sidebar_enabled=True}}
-{{extend 'template.html'}}
+{{#left_sidebar_enabled=True}}
+{{extend 'top-nav.html'}}
 
-<div class="row">
-  <div class="col-md-12">
-    <!-- Widget: user widget style 1 -->
-    <div class="box box-widget widget-user">
-      <!-- Add the bg color to the header using any of the bg-* classes -->
-      <div class="widget-user-header bg-aqua-active">
-        <h3 class="widget-user-username">{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
-        <!-- <h5 class="widget-user-desc">Founder &amp; CEO</h5> -->
-      </div>
-      <div class="widget-user-image">
-        <img class="img-circle" src="{{=URL('download', args=user[0].avatar)}}" alt="User Avatar">
-      </div>
-      <br>
-      <div class="box-footer">
-        <div class="row">
-          <div class="col-sm-4 border-right">
-            <div class="description-block">
-              <h5 class="description-header">1,0</h5>
-              <span class="description-text">Pontuação</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
-          <!-- /.col -->
-          <div class="col-sm-4 border-right">
-            <div class="description-block">
-              <h5 class="description-header">{{=myposts[2]}}</h5>
-              <span class="description-text">Postagens</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
-          <!-- /.col -->
-          <div class="col-sm-4">
-            <div class="description-block">
-              <h5 class="description-header">{{=amigos}}</h5>
-              <span class="description-text">Ajuntamentos</span>
-            </div>
-            <!-- /.description-block -->
-          </div>
-          <!-- /.col -->
+<section class="content">
+  <div class="row">
+    <div class="col-md-3">
+
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive img-circle" src="{{=URL('download', args=user[0].avatar)}}" alt="User Avatar">
+
+          <h3 class="profile-username text-center">{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
+
+          <!-- <p class="text-muted text-center">Software Engineer</p> -->
+
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              <b>Pontuação</b> <a class="pull-right">1,0</a>
+            </li>
+            <li class="list-group-item">
+              <b>Postagens</b> <a class="pull-right">{{=myposts[2]}}</a>
+            </li>
+            <li class="list-group-item">
+              <b>Ajuntamentos</b> <a class="pull-right">{{=amigos}}</a>
+            </li>
+          </ul>
+
+          <!-- <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a> -->
+          {{=add_amigo}}
         </div>
-        <!-- /.row -->
+        <!-- /.box-body -->
       </div>
-    </div>
-    <!-- /.widget-user -->
-  </div>
-</div>
+      <!-- /.box -->
 
-  {{for post in myposts[0]:}}
-  <div class="box box-widget">
-    <div class="box-header with-border">
-      <div class="user-block">
-        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
-          <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
-            <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
-          </a></span>
-        <span class="description">{{=prettydate(post.created_on)}}</span>
-      </div><!-- /.user-block -->
-      {{n_comments = 0}}
-      {{for c in comentarios:}}
-        {{if c.id == post.id:}}
-          {{n_comments += 1}}
-        {{pass}}
+      <!-- About Me Box -->
+      <!-- <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">About Me</h3>
+        </div>
+        <div class="box-body">
+          <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+
+          <p class="text-muted">
+            B.S. in Computer Science from the University of Tennessee at Knoxville
+          </p>
+
+          <hr>
+
+          <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+
+          <p class="text-muted">Malibu, California</p>
+
+          <hr>
+
+          <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
+
+          <p>
+            <span class="label label-danger">UI Design</span>
+            <span class="label label-success">Coding</span>
+            <span class="label label-info">Javascript</span>
+            <span class="label label-warning">PHP</span>
+            <span class="label label-primary">Node.js</span>
+          </p>
+
+          <hr>
+
+          <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+        </div>
+      </div> / .box-->
+    </div><!-- /.col -->
+
+    <div class="col-md-9">
+      {{for post in myposts[0]:}}
+      <div class="box box-widget">
+        <div class="box-header with-border">
+          <div class="user-block">
+            <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+              <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
+                <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
+              </a></span>
+            <span class="description">{{=prettydate(post.created_on)}}</span>
+          </div><!-- /.user-block -->
+          {{n_comments = 0}}
+          {{for c in comentarios:}}
+            {{if c.id == post.id:}}
+              {{n_comments += 1}}
+            {{pass}}
+          {{pass}}
+          <div class="box-tools">
+            <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
+          </div><!-- /.box-tools -->
+        </div><!-- /.box-header -->
+        <div class="box-body">
+          <!-- post text -->
+          {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
+          <hr>
+          <!-- Social sharing buttons -->
+          <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
+        </div><!-- /.box-body -->
+      </div><!-- /.box -->
       {{pass}}
-      <div class="box-tools">
-        <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
-      </div><!-- /.box-tools -->
-    </div><!-- /.box-header -->
-    <div class="box-body">
-      <!-- post text -->
-      {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
-      <hr>
-      <!-- Social sharing buttons -->
-      <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
-    </div><!-- /.box-body -->
-  </div><!-- /.box -->
-  {{pass}}
-
+    </div><!-- /.col -->
+</div><!-- /.row -->
+</section>
 
 <div class="pager">
   {{if int(request.vars.pagina) != 1:}}

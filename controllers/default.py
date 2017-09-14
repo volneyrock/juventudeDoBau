@@ -119,15 +119,14 @@ def perfil():
 
     situacao = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & ((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id))).select()
     amigos = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & (Amigos.situacao=="A")).count()
-    print amigos
     if user[0].id == auth.user_id: # Se for eu mesmo
         add_amigo = ''
     elif not situacao: # Se não houver solicitações
-        add_amigo = A("Adicionar amigo", _class='btn btn-primary', _href=URL(r=request, c='default', f='add_amigo', vars={'user_id':user_id}))
+        add_amigo = A("Adicionar amigo", _class='btn btn-primary btn-block', _href=URL(r=request, c='default', f='add_amigo', vars={'user_id':user_id}))
     elif situacao[0].situacao == "A": # Se já for amigo
-        add_amigo = A("Amigos", _class='btn btn-primary disabled')
+        add_amigo = A("Amigos", _class='btn btn-primary btn-block disabled')
     elif situacao[0].situacao == "P": # Se tiver pedido pendente
-        add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary disabled')
+        add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary btn-block disabled')
 
     return dict(user=user, myposts=myposts, add_amigo=add_amigo, comentarios=comentarios, votos=votos, amigos=amigos)
 
