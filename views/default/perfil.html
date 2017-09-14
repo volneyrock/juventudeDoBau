@@ -1,29 +1,89 @@
-{{extend 'layout.html'}}
-<div class="container">
-<div class="">
-    <h3>{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
-    <img class="responsive-img imagem-perfil" src="{{=URL('download', args=user[0].avatar)}}" alt="" />
-    {{=add_amigo}}
-</div>
-<br>
-{{for post in myposts:}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar) or URL('static', 'images/morrodobau.jpg')}}" alt="{{=post.created_by.nome}}" />
-            <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
-            {{n_comments = 0}}
-            {{for c in comentarios:}}
-              {{if c.id == post.id:}}
-                {{n_comments += 1}}
-              {{pass}}
-            {{pass}}
-            <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
+{{left_sidebar_enabled=True}}
+{{extend 'template.html'}}
+
+<div class="row">
+  <div class="col-md-12">
+    <!-- Widget: user widget style 1 -->
+    <div class="box box-widget widget-user">
+      <!-- Add the bg color to the header using any of the bg-* classes -->
+      <div class="widget-user-header bg-aqua-active">
+        <h3 class="widget-user-username">{{="%(first_name)s %(last_name)s" %user[0]}}</h3>
+        <!-- <h5 class="widget-user-desc">Founder &amp; CEO</h5> -->
+      </div>
+      <div class="widget-user-image">
+        <img class="img-circle" src="{{=URL('download', args=user[0].avatar)}}" alt="User Avatar">
+      </div>
+      <br>
+      <div class="box-footer">
+        <div class="row">
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">1,0</h5>
+              <span class="description-text">Pontuação</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4 border-right">
+            <div class="description-block">
+              <h5 class="description-header">{{=myposts[2]}}</h5>
+              <span class="description-text">Postagens</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
+          <div class="col-sm-4">
+            <div class="description-block">
+              <h5 class="description-header">{{=amigos}}</h5>
+              <span class="description-text">Ajuntamentos</span>
+            </div>
+            <!-- /.description-block -->
+          </div>
+          <!-- /.col -->
         </div>
-        <div class="panel-body">
-            {{=DIV(MARKMIN(post.corpo), _class='post-body')}}<br>
-            <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-            <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
-        </div>
+        <!-- /.row -->
+      </div>
     </div>
-{{pass}}
+    <!-- /.widget-user -->
+  </div>
+</div>
+
+  {{for post in myposts[0]:}}
+  <div class="box box-widget">
+    <div class="box-header with-border">
+      <div class="user-block">
+        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+          <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
+            <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
+          </a></span>
+        <span class="description">{{=prettydate(post.created_on)}}</span>
+      </div><!-- /.user-block -->
+      {{n_comments = 0}}
+      {{for c in comentarios:}}
+        {{if c.id == post.id:}}
+          {{n_comments += 1}}
+        {{pass}}
+      {{pass}}
+      <div class="box-tools">
+        <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
+      </div><!-- /.box-tools -->
+    </div><!-- /.box-header -->
+    <div class="box-body">
+      <!-- post text -->
+      {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
+      <hr>
+      <!-- Social sharing buttons -->
+      <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
+    </div><!-- /.box-body -->
+  </div><!-- /.box -->
+  {{pass}}
+
+
+<div class="pager">
+  {{if int(request.vars.pagina) != 1:}}
+    <a href="{{=URL('default', 'perfil', args=request.args, vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
+  {{pass}}
+  {{if int(request.vars.pagina) < myposts[2]/10.0:}}
+    <a href="{{=URL('default', 'perfil', args=request.args, vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
+  {{pass}}
 </div>

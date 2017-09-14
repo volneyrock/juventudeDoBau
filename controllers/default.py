@@ -102,12 +102,24 @@ def amigos():
 @auth.requires_login()
 def perfil():
     user_id = request.vars.user_id
+    try:
+        pagina = int(request.vars.pagina)
+    except TypeError:
+        redirect(URL('default', 'perfil', vars={'pagina':1, 'user_id':user_id}))
     user = db(db.auth_user.id==user_id).select()
-    myposts = db(Post.autor==user_id).select(orderby=~Post.pontos|~Post.created_on)
+    query = (Post.autor==user_id)
+    myposts = consultaComPaginacao(
+                    consulta=db(query),
+                    pagina=pagina,
+                    paginacao=10,
+                    filtros={'orderby':~Post.pontos|~Post.created_on},
+                )
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
 
     situacao = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & ((Amigos.solicitante==auth.user_id) | (Amigos.solicitado==auth.user_id))).select()
+    amigos = db(((Amigos.solicitante==user_id) | (Amigos.solicitado==user_id)) & (Amigos.situacao=="A")).count()
+    print amigos
     if user[0].id == auth.user_id: # Se for eu mesmo
         add_amigo = ''
     elif not situacao: # Se não houver solicitações
@@ -117,7 +129,7 @@ def perfil():
     elif situacao[0].situacao == "P": # Se tiver pedido pendente
         add_amigo = A("Pedido de amizade pendente", _class='btn btn-primary disabled')
 
-    return dict(user=user, myposts=myposts, add_amigo=add_amigo, comentarios=comentarios, votos=votos)
+    return dict(user=user, myposts=myposts, add_amigo=add_amigo, comentarios=comentarios, votos=votos, amigos=amigos)
 
 
 @auth.requires_login()

@@ -46,6 +46,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
   <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
   {{include 'web2py_ajax.html'}} <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
+  {{left_sidebar_enabled = globals().get('left_sidebar_enabled', False)}}
 
 </head>
 <!--
@@ -99,7 +100,7 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{{=URL('default', 'download', args=auth.user.avatar) or ''}}" class="img-circle" alt="User Image">
+          <img src="{{=URL('default', 'download', args=auth.user.avatar) or ''}}" class="img-circle img-sm" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{="%(first_name)s %(last_name)s" %auth.user}}</p>
@@ -125,13 +126,13 @@ desired effect
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>Olar {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
+    <!-- <section class="content-header">
+      <h1>Olar {{#="%(first_name)s %(last_name)s" %auth.user}}</h1>
       <ol class="breadcrumb">
-        <!-- <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li> -->
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
       </ol>
-    </section>
+    </section> -->
 
     <!-- Main content -->
     <section class="content container-fluid">
