@@ -1,37 +1,64 @@
-{{extend 'layout.html'}}
-<div class="panel panel-defaul">
-    <div class="panel-heading">
-        <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}" />
-        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
+{{left_sidebar_enabled=True}}
+{{extend 'template.html'}}
+<!-- Box Comment -->
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <div class="user-block">
+      <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+        <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
+          <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
+        </a></span>
+      <span class="description">{{=prettydate(post.created_on)}}</span>
     </div>
-    <div class="panel-body">
-      {{=DIV(MARKMIN(post.corpo), _class='post-body')}}<br>
-      <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-      <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
+    <!-- /.user-block -->
+    <div class="box-tools">
+      <!--Cabeçalho lado direito  -->
     </div>
-</div>
-
-<div class="clearfix"></div>
-
-<div class="col-xs-12 col-sm-8 col-sm-offset-2">
-<h2>{{=T("Comments")}} <span class="badge">{{=len(comments)}}</span></h2>
-{{for comment in comments:}}
-<div class="media panel panel-default" style="padding: 15px;">
-  <div class="media-left">
-      <img class="media-object" src="{{=URL('download', args=comment.created_by.avatar)}}" alt="{{=T('User avatar')}}" height="64" width="64">
+    <!-- /.box-tools -->
   </div>
-  <div class="media-body">
-    <h4 class="media-heading">{{=comment.created_by.first_name}} {{=comment.created_by.last_name}} {{=T('digou')}}:</h4>
-    <p>{{=XML(comment.comentario)}}</p>
+  <!-- /.box-header -->
+  <div class="box-body">
+    <!-- post text -->
+    {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
+    <hr>
+    <!-- Social sharing buttons -->
+    <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
   </div>
-</div>
-{{pass}}
-<br>
-</div>
-
-<div class="panel panel-default col-xs-12 col-sm-8 col-sm-offset-2">
-  <div class="panel-body">
-    <h3>{{=T("Reply this user")}}</h3>
-    {{=form}}
+  <!-- /.box-body -->
+  {{for comment in comments:}}
+  <div class="box-footer box-comments">
+    <div class="box-comment">
+      <!-- User image -->
+      <a href="{{=URL('perfil', vars={'user_id':comment.created_by.id})}}">
+        <img class="img-circle img-sm" src="{{=URL('download', args=comment.created_by.avatar)}}" alt="{{=T('User avatar')}}">
+      <a/>
+      <div class="comment-text">
+            <span class="username">
+              {{=comment.created_by.first_name}} {{=comment.created_by.last_name}} {{=T('digou')}}:
+              <span class="text-muted pull-right">{{=prettydate(comment.created_on)}}</span>
+            </span><!-- /.username -->
+            {{=XML(comment.comentario)}}
+      </div>
+      <!-- /.comment-text -->
+    </div>
+    <!-- /.box-comment -->
   </div>
+  <!-- /.box-footer -->
+  {{pass}}
+  <div class="box-footer">
+    <form action="#" method="post">
+      <img class="img-responsive img-circle img-sm" src="{{=URL('download', args=auth.user.avatar)}}" alt="{{=T('User avatar')}}">
+      <!-- .img-push is used to add margin to elements next to floating images -->
+      <div class="img-push">
+        {{=form.custom.begin}}
+        {{form.elements('#comments_comentario')[0]['_class']='form-control input-sm'}}
+        {{form.elements('#comments_comentario')[0]['_placeholder']='Digite um comentário'}}
+        {{=form.custom.widget.comentario}}
+        <!-- <input type="text" class="form-control input-sm" placeholder="Press enter to post comment"> -->
+        {{=form.custom.end}}
+      </div>
+    </form>
+  </div>
+  <!-- /.box-footer -->
 </div>
+<!-- /.box -->

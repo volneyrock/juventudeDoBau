@@ -1,26 +1,34 @@
-{{extend 'layout.html'}}
-<h1>Olar {{="%(first_name)s %(last_name)s" %auth.user}}</h1>
-<hr>
-<div class="container">
+{{left_sidebar_enabled=True}}
+{{extend 'template.html'}}
+
 {{for post in posts[0]:}}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <img class='avatar responsive-img' src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}" />
-            <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{=post.created_by.first_name}}</a> digou:
-            {{n_comments = 0}}
-            {{for c in comentarios:}}
-              {{if c.id == post.id:}}
-                {{n_comments += 1}}
-              {{pass}}
-            {{pass}}
-            <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
-        </div>
-        <div class="panel-body">
-          {{=DIV(MARKMIN(post.corpo), _class='post-body')}}<br>
-          <small>{{=prettydate(post.created_on)}}</small><!-- Data formatada-->
-          <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
-        </div>
-    </div>
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <div class="user-block">
+      <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+        <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
+          <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
+        </a></span>
+      <span class="description">{{=prettydate(post.created_on)}}</span>
+    </div><!-- /.user-block -->
+    {{n_comments = 0}}
+    {{for c in comentarios:}}
+      {{if c.id == post.id:}}
+        {{n_comments += 1}}
+      {{pass}}
+    {{pass}}
+    <div class="box-tools">
+      <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
+    </div><!-- /.box-tools -->
+  </div><!-- /.box-header -->
+  <div class="box-body">
+    <!-- post text -->
+    {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
+    <hr>
+    <!-- Social sharing buttons -->
+    <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
+  </div><!-- /.box-body -->
+</div><!-- /.box -->
 {{pass}}
 
 <div class="pager">
