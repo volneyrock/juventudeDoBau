@@ -1,3 +1,7 @@
+.titulo{
+  margin: 0 auto;
+  width: 50%;  
+}
 .mensagem{
     margin: 0 auto; /*centraliza objeto na tela*/
     width: 50%;

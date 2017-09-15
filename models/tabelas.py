@@ -1,13 +1,14 @@
 REACTS = ['legal', 'ruim']
 Post = db.define_table('post',
-    Field("autor", "reference auth_user"), # foreign key com a tabela de usuários
-    Field("corpo", "text", label="Mensagem"), # Campo do texto
+    Field('autor', 'reference auth_user'), # foreign key com a tabela de usuários
+    Field('titulo', 'string', label='Título'),
+    Field('corpo', 'text', label='Mensagem'), # Campo do texto
     Field('pontos', 'integer', label='Pontos', default=0),
     auth.signature # Campos para auditoria de registros
 )
 ## Validadores para Post
+Post.titulo.requires = [IS_NOT_EMPTY(error_message="Campo obrigatório"), IS_LENGTH(50)]
 Post.corpo.requires = [IS_NOT_EMPTY(error_message="Campo obrigatório"),]
-    # IS_LENGTH(140)
 
 Reacts = db.define_table('reacts',
     Field('post', 'reference post'),

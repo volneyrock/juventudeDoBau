@@ -1,13 +1,15 @@
-{{left_sidebar_enabled=True}}
-{{extend 'template.html'}}
+{{extend 'top-nav.html'}}
+<br>
 <!-- Box Comment -->
 <div class="box box-widget">
   <div class="box-header with-border">
     <div class="user-block">
       <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
         <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
-          <span class="username">{{=post.created_by.first_name}} {{=T('digou')}}:
-        </a></span>
+      </a>
+      <span class="username">
+        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{="%(first_name)s %(last_name)s" %post.created_by}}</a> {{=T('digou')}}: {{=post.titulo}}
+      </span>
       <span class="description">{{=prettydate(post.created_on)}}</span>
     </div>
     <!-- /.user-block -->
@@ -34,10 +36,10 @@
       <a/>
       <div class="comment-text">
             <span class="username">
-              {{=comment.created_by.first_name}} {{=comment.created_by.last_name}} {{=T('digou')}}:
+              <a href="#">{{="%(first_name)s %(last_name)s" %comment.created_by}}</a> {{=T('digou')}}:
               <span class="text-muted pull-right">{{=prettydate(comment.created_on)}}</span>
             </span><!-- /.username -->
-            {{=XML(comment.comentario)}}
+        {{=DIV(MARKMIN(comment.comentario))}}
       </div>
       <!-- /.comment-text -->
     </div>
