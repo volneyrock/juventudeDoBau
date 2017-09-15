@@ -100,7 +100,9 @@ desired effect
       <section class="content-header">
         <h1>
           Olar
-          <small>{{="%(first_name)s %(last_name)s" %auth.user}}</small>
+          <a href="{{=URL('perfil', vars={'user_id':auth.user_id})}}">
+            <small>{{="%(first_name)s %(last_name)s" %auth.user}}</small>
+          </a>
         </h1>
         <!-- <ol class="breadcrumb">
           <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
