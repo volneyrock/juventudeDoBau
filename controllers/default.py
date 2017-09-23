@@ -23,6 +23,7 @@ def index():
     return dict(message=T('Welcome to web2py!'))
 
 
+
 @auth.requires_login()
 def timeline():
     #Se não for informado, redirecionar para página 1
@@ -79,7 +80,8 @@ def post():
     comments = db(Comments.post == post_id).select()
     form = SQLFORM(Comments, submit_button="Comentar", fields=['comentario']) # Formulário comentar
     form.vars.post = post_id
-    if form.process().accepted:
+    form.process()
+    if form.accepted:
         response.flash = "Mensagem postada com sucesso :)"
         redirect(URL('default', 'post', args=post_id))
     elif form.errors:
@@ -200,7 +202,7 @@ def curtir():
             db(Post.id==post).update(pontos=pontos)
             redirect(URL('default', 'curtir', vars={'id':post}))
     else:
-        form =form1
+        form = form1
         if form.process().accepted:
             Reacts.insert(post=post, jovem=auth.user_id, react=react)
             pontos = db(Reacts.post == post).count()
@@ -208,6 +210,20 @@ def curtir():
             redirect(URL('default', 'curtir', vars={'id':post}))
 
     return dict(pontos=pontos, form=form)
+
+
+@auth.requires_login()
+def deleta_post():
+    db((Post.id==request.vars.post)&(Post.created_by==auth.user_id)).delete()
+    session.flash = 'Post apagado'
+    redirect(URL('default', request.vars.page))
+
+def deleta_comentario():
+    db((Comments.id==request.vars.comentario)&(Comments.created_by==auth.user_id)).delete()
+    session.flash = 'Comentário apagado'
+    redirect(URL('default', 'post', args=request.vars.post_id))
+
+
 
 # def pontos():
 #     post_id = request.vars.id

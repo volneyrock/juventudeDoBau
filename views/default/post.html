@@ -17,6 +17,11 @@
       <!--Cabeçalho lado direito  -->
     </div>
     <!-- /.box-tools -->
+    <div class="box-tools">
+      {{if auth.is_logged_in() and post.created_by == auth.user_id:}}
+        <a href="{{=URL('default', 'deleta_post', vars={'post':post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+      {{pass}}
+    </div><!-- /.box-tools -->
   </div>
   <!-- /.box-header -->
   <div class="box-body">
@@ -37,7 +42,12 @@
       <div class="comment-text">
             <span class="username">
               <a href="#">{{="%(first_name)s %(last_name)s" %comment.created_by}}</a> {{=T('digou')}}:
-              <span class="text-muted pull-right">{{=prettydate(comment.created_on)}}</span>
+              <span class="text-muted pull-right">
+                {{=prettydate(comment.created_on)}}
+                {{if auth.is_logged_in() and comment.created_by == auth.user_id:}}
+                  <a href="{{=URL('default', 'deleta_comentario', vars={'comentario':comment.id, 'post_id':post.id})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+                {{pass}}
+              </span>
             </span><!-- /.username -->
         {{=DIV(MARKMIN(comment.comentario))}}
       </div>
@@ -56,7 +66,7 @@
         {{form.elements('#comments_comentario')[0]['_class']='form-control input-sm'}}
         {{form.elements('#comments_comentario')[0]['_placeholder']='Digite um comentário'}}
         {{=form.custom.widget.comentario}}
-        <!-- <input type="text" class="form-control input-sm" placeholder="Press enter to post comment"> -->
+        {{=form.custom.submit}}
         {{=form.custom.end}}
       </div>
     </form>

@@ -43,6 +43,9 @@
       </div><!-- /.user-block -->
       <div class="box-tools">
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        {{if auth.is_logged_in() and post.created_by == auth.user_id:}}
+          <a href="{{=URL('default', 'deleta_post', vars={'post':post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+        {{pass}}
       </div><!-- /.box-tools -->
     </div><!-- /.box-header -->
     <div class="box-body">

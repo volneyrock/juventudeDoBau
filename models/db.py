@@ -119,3 +119,8 @@ auth.settings.reset_password_requires_verification = True
 # after defining tables, uncomment below to enable auditing
 # -------------------------------------------------------------------------
 # auth.enable_record_versioning(db)
+if db(db.auth_group).count() == 0:
+    db.auth_group.insert(role="users", description="Users")
+    db.commit()
+auth.settings.create_user_groups = False
+auth.settings.everybody_group_id = 1
