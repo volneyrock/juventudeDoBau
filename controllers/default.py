@@ -32,8 +32,6 @@ def timeline():
     except TypeError:
         redirect(URL('default', 'timeline', vars={'pagina':1}))
 
-    Post.autor.default = auth.user_id # Define o usuário logado como padrão para postagens
-    Post.autor.writable = Post.autor.readable = False # Altera proteção de acesso ao campo autor
     form = SQLFORM(Post, submit_button="Postar") # Formulário postar
     if form.process().accepted:
         response.flash = "Mensagem postada com sucesso :)"
@@ -109,7 +107,7 @@ def perfil():
     except TypeError:
         redirect(URL('default', 'perfil', vars={'pagina':1, 'user_id':user_id}))
     user = db(db.auth_user.id==user_id).select()
-    query = (Post.autor==user_id)
+    query = (Post.created_by==user_id)
     myposts = consultaComPaginacao(
                     consulta=db(query),
                     pagina=pagina,

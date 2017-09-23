@@ -1,6 +1,5 @@
 REACTS = ['legal', 'ruim']
 Post = db.define_table('post',
-    Field('autor', 'reference auth_user'), # foreign key com a tabela de usuários
     Field('titulo', 'string', label='Título'),
     Field('corpo', 'text', label='Mensagem'), # Campo do texto
     Field('pontos', 'integer', label='Pontos', default=0),
