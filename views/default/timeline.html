@@ -1,6 +1,7 @@
 {{extend 'top-nav.html'}}
 {{=form.custom.begin}}<!-- Gera o formulário html para o objeto form-->
 <br>
+{{if auth.is_logged_in():}}
 <div class="form-group">
     <div class="input-append">
         {{form.elements('#post_titulo')[0]['_class']='form-control titulo'}}
@@ -13,10 +14,11 @@
     <div class="btn-postar">
         {{=form.custom.submit}}
     </div>
-
 </div>
 {{=form.custom.end}}
 <hr>
+{{pass}}
+
 
 {{for post in posts[0]:}}
   {{n_comments = 0}}

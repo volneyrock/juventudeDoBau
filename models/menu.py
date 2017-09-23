@@ -27,12 +27,18 @@ response.google_analytics_id = None
 # ----------------------------------------------------------------------------------------------------------------------
 # this is the main application menu add/remove items as required
 # ----------------------------------------------------------------------------------------------------------------------
+if auth.is_logged_in():
+    response.menu = [
+        (T('Home'), False, URL('default', 'index'), []),
+        (T('News'), False, URL('default', 'novos'), []),
+        (T('Friends'), False, URL('default', 'amigos'), []),
+    ]
+else:
+    response.menu = [
+        (T('Home'), False, URL('default', 'index'), []),
+        (T('News'), False, URL('default', 'novos'), []),
+    ]
 
-response.menu = [
-    (T('Home'), False, URL('default', 'index'), []),
-    (T('News'), False, URL('default', 'novos'), []),
-    (T('Friends'), False, URL('default', 'amigos'), []),
-]
 
 DEVELOPMENT_MENU = False
 

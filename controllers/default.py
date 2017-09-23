@@ -9,7 +9,6 @@
 # -------------------------------------------------------------------------
 
 
-@auth.requires_login()
 def index():
     """
     example action using the internationalization operator T and flash
@@ -23,8 +22,6 @@ def index():
     return dict(message=T('Welcome to web2py!'))
 
 
-
-@auth.requires_login()
 def timeline():
     #Se não for informado, redirecionar para página 1
     try:
@@ -49,7 +46,6 @@ def timeline():
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
     return dict(form=form, posts=posts, comentarios=comentarios, votos=votos)
 
-@auth.requires_login()
 def novos():
     #Se não for informado, redirecionar para página 1
     try:
@@ -71,7 +67,6 @@ def novos():
     return dict(posts=posts, comentarios=comentarios, votos=votos)
 
 
-@auth.requires_login()
 def post():
     post_id = request.args(0)
     post = db(Post.id == post_id).select().first()

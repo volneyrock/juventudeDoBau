@@ -1,4 +1,6 @@
 <h5>Pontos: {{=pontos}}</h5>
-{{=form.custom.begin}}
-{{=form.custom.submit}}
-{{=form.custom.end}}
+{{if auth.is_logged_in():}}
+  {{=form.custom.begin}}
+  {{=form.custom.submit}}
+  {{=form.custom.end}}
+{{pass}}

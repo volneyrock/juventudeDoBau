@@ -98,12 +98,14 @@ desired effect
     <div class="container">
       <!-- Content Header (Page header) -->
       <section class="content-header">
+        {{if auth.is_logged_in():}}
         <h1>
           Olar
           <a href="{{=URL('perfil', vars={'user_id':auth.user_id})}}">
             <small>{{="%(first_name)s %(last_name)s" %auth.user}}</small>
           </a>
         </h1>
+        {{pass}}
         <!-- <ol class="breadcrumb">
           <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
           <li><a href="#">Layout</a></li>
