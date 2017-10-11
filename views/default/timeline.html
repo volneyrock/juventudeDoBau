@@ -59,10 +59,10 @@
 <div class="row">
   <div class="pager">
     {{if int(request.vars.pagina) != 1:}}
-      <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
+      <a href="{{=URL('default', 'timeline', vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
     {{pass}}
     {{if int(request.vars.pagina) < posts[2]/10.0:}}
-      <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
+      <a href="{{=URL('default', 'timeline', vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
     {{pass}}
   </div>
 </div>
