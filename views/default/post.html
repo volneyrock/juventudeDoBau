@@ -10,7 +10,10 @@
       <span class="username">
         <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">{{="%(first_name)s %(last_name)s" %post.created_by}}</a> {{=T('digou')}}: {{=post.titulo}}
       </span>
-      <span class="description">{{=prettydate(post.created_on)}}</span>
+      <span class="description">
+        {{=prettydate(post.created_on)}}&emsp;
+        postado em: <a href="{{=URL('com', 'c', vars={'c_id':post.comunidade.id})}}">{{=post.comunidade.nome}}</a>
+      </span>
     </div>
     <!-- /.user-block -->
     <div class="box-tools">

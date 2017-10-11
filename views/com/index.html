@@ -1,0 +1,29 @@
+{{extend 'top-nav.html'}}
+
+
+<div class="box box-widget">
+  <div class="box-header with-border">
+    <div class="user-block">
+      <a href="{{=URL('perfil', vars={'user_id':auth.user_id})}}">
+        <img class="img-circle" src="{{=URL('default', 'download', args=auth.user.avatar)}}" alt="User Avatar">
+          <span class="username">Comunidades:
+        </a></span>
+    </div><!-- /.user-block -->
+    <div class="box-tools">
+        <a href="{{=URL('com', 'nova_com')}}">Criar Comunidade</a>
+    </div><!-- /.box-tools -->
+  </div><!-- /.box-header -->
+  <div class="box-body">
+    {{#=BEAUTIFY(com)}}
+    {{ for c in com: }}
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <div class="thumbBlock">
+            <a href="{{=URL('com', 'c', vars={'c_id':c.comunidades.id})}}">
+              <img class='mythumb responsive-img' src="{{=URL('default', 'download', args=c.comunidades.avatar)}}" alt="" />
+              <p class = 'texto'>{{=c.comunidades.nome}}</p>
+            </a>
+          </div>
+        </div>
+    {{pass}}
+  </div><!-- /.box-body -->
+</div><!-- /.box -->

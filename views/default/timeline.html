@@ -1,71 +1,68 @@
 {{extend 'top-nav.html'}}
-{{=form.custom.begin}}<!-- Gera o formulário html para o objeto form-->
 <br>
 {{if auth.is_logged_in():}}
-<div class="form-group">
-    <div class="input-append">
-        {{form.elements('#post_titulo')[0]['_class']='form-control titulo'}}
-        {{form.elements('#post_titulo')[0]['_placeholder']='Título'}}
-        {{=form.custom.widget.titulo}}
-        {{form.elements('#post_corpo')[0]['_class']='form-control mensagem'}}
-        {{form.elements('#post_corpo')[0]['_placeholder']='O que ta pegando %(first_name)s ?' %auth.user}}
-        {{=form.custom.widget.corpo}}
-    </div>
-    <div class="btn-postar">
-        {{=form.custom.submit}}
-    </div>
+<div class="row">
+  <center>
+    <a href="{{=URL('default', 'novo_post')}}" class='btn btn-info'>Novo Post</a>
+  </center>
 </div>
-{{=form.custom.end}}
-<hr>
+<br>
 {{pass}}
 
 
-{{for post in posts[0]:}}
-  {{n_comments = 0}}
-  {{for c in comentarios:}}
-    {{if c.id == post.id:}}
-      {{n_comments += 1}}
+<div class="row">
+  {{for post in posts[0]:}}
+    {{n_comments = 0}}
+    {{for c in comentarios:}}
+      {{if c.id == post.post.id:}}
+        {{n_comments += 1}}
+      {{pass}}
     {{pass}}
-  {{pass}}
-  <div class="box box-widget collapsed-box">
-    <div class="box-header with-border">
-      <div class="user-block">
-        <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
-          <img class="img-circle" src="{{=URL('download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
-        </a>
-        <span class="username">
-          <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
-          {{="%(first_name)s %(last_name)s" %post.created_by}}
+    <div class="box box-widget collapsed-box">
+      <div class="box-header with-border">
+        <div class="user-block">
+          <a href="{{=URL('perfil', vars={'user_id':post.post.created_by.id})}}">
+            <img class="img-circle" src="{{=URL('default', 'download', args=post.post.created_by.avatar)}}" alt="{{=post.post.created_by.nome}}">
           </a>
-          {{=T('digou')}}:
-          <a href="{{=URL('default', 'post', args=post.id)}}">{{=post.titulo}}</a>
-        </span>
-        <span class="description">{{=prettydate(post.created_on)}}</span>
-        <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
-      </div><!-- /.user-block -->
-      <div class="box-tools">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-        {{if auth.is_logged_in() and post.created_by == auth.user_id:}}
-          <a href="{{=URL('default', 'deleta_post', vars={'post':post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
-        {{pass}}
-      </div><!-- /.box-tools -->
-    </div><!-- /.box-header -->
-    <div class="box-body">
-      <!-- post text -->
-      {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
-      <hr>
-      <!-- Social sharing buttons -->
-      <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
-    </div><!-- /.box-body -->
-  </div><!-- /.box -->
-{{pass}}
+          <span class="username">
+            <a href="{{=URL('perfil', vars={'user_id':post.post.created_by.id})}}">
+              {{="%(first_name)s %(last_name)s" %post.post.created_by}}
+            </a>
+            {{=T('digou')}}:
+            <a href="{{=URL('default', 'post', args=post.post.id)}}">{{=post.post.titulo}}</a>
+          </span>
+          <span class="description">
+            {{=prettydate(post.post.created_on)}}&emsp;
+            postado em: <a href="{{=URL('com', 'c', vars={'c_id':post.comunidades.id})}}">{{=post.comunidades.nome}}</a>
+          </span>
+          <a class=pull-right href="{{=URL('default', 'post', args=post.post.id)}}">{{=n_comments}} comentários</a>
+        </div><!-- /.user-block -->
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+          {{if auth.is_logged_in() and post.post.created_by == auth.user_id:}}
+            <a href="{{=URL('default', 'deleta_post', vars={'post':post.post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+          {{pass}}
+        </div><!-- /.box-tools -->
+      </div><!-- /.box-header -->
+      <div class="box-body">
+        <!-- post text -->
+        {{=DIV(MARKMIN(post.post.corpo), _class='post-body')}} </br>
+        <hr>
+        <!-- Social sharing buttons -->
+        <p>{{=LOAD('default', 'curtir.load', vars={'id':post.post.id, 'voto':'legal'}, ajax=True)}}</p>
+      </div><!-- /.box-body -->
+    </div><!-- /.box -->
+  {{pass}}
+</div>
 
 
-<div class="pager">
-  {{if int(request.vars.pagina) != 1:}}
-    <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
-  {{pass}}
-  {{if int(request.vars.pagina) < posts[2]/10.0:}}
-    <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
-  {{pass}}
+<div class="row">
+  <div class="pager">
+    {{if int(request.vars.pagina) != 1:}}
+      <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
+    {{pass}}
+    {{if int(request.vars.pagina) < posts[2]/10.0:}}
+      <a href="{{=URL('default', 'timeline', args=request.args, vars={'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
+    {{pass}}
+  </div>
 </div>

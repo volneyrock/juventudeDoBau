@@ -1,0 +1,18 @@
+{{extend 'top-nav.html'}}
+
+{{=form}}
+{{=delBtn}}
+
+<script type="text/javascript">
+   $(document).ready(function() {
+     $('#delBtn').click(function(e) {
+       e.preventDefault();
+       btn = $(this);
+       thisHref = btn.attr('href');
+       msg = btn.attr('message');
+       if(confirm(msg)){
+         window.location = thisHref;
+       }
+     });
+   })
+</script>

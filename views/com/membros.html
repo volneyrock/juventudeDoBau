@@ -1,0 +1,44 @@
+{{extend 'top-nav.html'}}
+
+
+<div class="col-md-8">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Membros</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-bordered">
+        <tr>
+          <th>Membro</th>
+          <th>Tornar admin</th>
+          <th>Banir</th>
+        </tr>
+        <tr>
+          <td>{{="%(first_name)s %(last_name)s" %membros[0]['comunidades'].created_by}}</td>
+          <td></td>
+          <td></td>
+        </tr>
+        {{for membro in membros:}}
+          <tr>
+            <td>{{="%(first_name)s %(last_name)s" %membro.commembership.jovem}}</td>
+            <td class='text-center'><a href="#" class='btn btn-info btn-xs'>Admin</a></td>
+            <td class='text-center'><a href="#" class='btn btn-danger btn-xs'>Banir</a></td>
+          </tr>
+        {{pass}}
+      </table>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer clearfix">
+      <ul class="pagination pagination-sm no-margin pull-right">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+    </div>
+  </div>
+  <!-- /.box -->
+</div>
+<!-- /.col -->

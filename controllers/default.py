@@ -33,10 +33,12 @@ def timeline():
     if form.process().accepted:
         response.flash = "Mensagem postada com sucesso :)"
 
+    query = ((Post.comunidade==Comunidades.id)&(Comunidades.privada != True))
     posts = consultaComPaginacao(
-                    consulta=db(Post),
+                    consulta=db(query),
                     pagina=pagina,
                     paginacao=10,
+                    campos=[Post.id, Post.titulo, Post.created_by, Post.corpo, Post.pontos, Post.created_on, Comunidades.id, Comunidades.nome],
                     filtros={'orderby':~Post.pontos|~Post.created_on},
                 )
     if request.extension in ['json', 'xml']:
@@ -44,7 +46,9 @@ def timeline():
 
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+
     return dict(form=form, posts=posts, comentarios=comentarios, votos=votos)
+
 
 def novos():
     #Se não for informado, redirecionar para página 1
@@ -53,10 +57,12 @@ def novos():
     except TypeError:
         redirect(URL('default', 'novos', vars={'pagina':1}))
 
+    query = ((Post.comunidade==Comunidades.id)&(Comunidades.privada != True))
     posts = consultaComPaginacao(
-                    consulta=db(Post),
+                    consulta=db(query),
                     pagina=pagina,
                     paginacao=10,
+                    campos=[Post.id, Post.titulo, Post.created_by, Post.corpo, Post.pontos, Post.created_on, Comunidades.id, Comunidades.nome],
                     filtros={'orderby':~Post.created_on},
                 )
     if request.extension in ['json', 'xml']:
@@ -64,7 +70,19 @@ def novos():
 
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
+
     return dict(posts=posts, comentarios=comentarios, votos=votos)
+
+
+@auth.requires_login()
+def novo_post():
+    form = SQLFORM(Post, submit_button="Postar", fields=['titulo', 'corpo', 'comunidade']) # Formulário postar
+    if request.vars.c_id:
+        form.vars.comunidade = request.vars.c_id
+    if form.process().accepted:
+        post = db((Post.titulo==form.vars.titulo)&(Post.corpo==form.vars.corpo)).select().first()['id']
+        redirect(URL('default', 'post', args=post))
+    return dict(form=form)
 
 
 def post():

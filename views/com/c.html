@@ -1,0 +1,102 @@
+{{extend 'top-nav.html'}}
+
+<section class="content">
+  <div class="row">
+    <div class="col-md-3">
+      <!-- Profile Image -->
+      <div class="box box-primary">
+        <div class="box-body box-profile">
+          <img class="profile-user-img img-responsive" src="{{=URL('default', 'download', args=c[0].avatar)}}" alt="Comm Avatar">
+
+          <h3 class="profile-username text-center">{{=c[0].nome}}</h3>
+
+          <!-- <p class="text-muted text-center">Software Engineer</p> -->
+
+          <ul class="list-group list-group-unbordered">
+            <li class="list-group-item">
+              {{try:}}
+                {{if c[0].created_by == auth.user_id or situacao[0].administrador == True:}}
+                  <a href="{{=URL('com', 'membros', vars={'c_id':c[0].id})}}"><b>Membros</b> <a class="pull-right">{{=jovens}}</a></a>
+                {{else:}}
+                  <b>Membros</b> <a class="pull-right">{{=jovens}}</a>
+                {{pass}}
+              {{except:}}
+                <b>Membros</b> <a class="pull-right">{{=jovens}}</a>
+              {{pass}}
+            </li>
+            <li class="list-group-item">
+              <b>Postagens</b> <a class="pull-right">{{=posts[2] if posts != 0 else 0 }}</a>
+            </li>
+          </ul>
+          {{=novo_post}}
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+      <!-- About Me Box -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Descrição</h3>
+        </div>
+        <div class="box-body">
+          <strong><i class="fa fa-file-text-o margin-r-5"></i> {{=c[0].nome}}</strong>
+          <p>{{=c[0].descricao}}</p>
+          <hr>
+          {{=add_com}}
+        </div>
+      </div> <!-- / .box-->
+    </div>
+
+    {{if posts != 0:}}
+      <div class="col-md-9">
+        {{for post in posts[0]:}}
+          {{n_comments = 0}}
+          {{for c in comentarios:}}
+            {{if c.id == post.id:}}
+              {{n_comments += 1}}
+            {{pass}}
+          {{pass}}
+          <div class="box box-widget collapsed-box">
+            <div class="box-header with-border">
+              <div class="user-block">
+                <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+                  <img class="img-circle" src="{{=URL('default', 'download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
+                </a>
+                <span class="username">
+                  <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+                    {{="%(first_name)s %(last_name)s" %post.created_by}}
+                  </a>
+                  {{=T('digou')}}:
+                  <a href="{{=URL('default', 'post', args=post.id)}}">{{=post.titulo}}</a>
+                </span>
+                <span class="description">{{=prettydate(post.created_on)}}</span>
+                <a class=pull-right href="{{=URL('default', 'post', args=post.id)}}">{{=n_comments}} comentários</a>
+              </div><!-- /.user-block -->
+              <div class="box-tools">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                  {{if auth.is_logged_in() and post.created_by == auth.user_id:}}
+                    <a href="{{=URL('default', 'deleta_post', vars={'post':post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+                  {{pass}}
+                </div><!-- /.box-tools -->
+              </div><!-- /.box-header -->
+            <div class="box-body">
+              <!-- post text -->
+              {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
+              <hr>
+              <!-- Social sharing buttons -->
+              <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
+            </div><!-- /.box-body -->
+          </div><!-- /.box -->
+        {{pass}}
+      </div><!-- /.col -->
+      <div class="pager">
+        {{if int(request.vars.pagina) != 1:}}
+          <a href="{{=URL('com', 'c', args=request.args, vars={'c_id':c[0].id, 'pagina':int(request.vars.pagina)-1})}}">❮ Anterior</a>&emsp;
+        {{pass}}
+        {{if int(request.vars.pagina) < posts[2]/10.0:}}
+          <a href="{{=URL('com', 'c', args=request.args, vars={'c_id':c[0].id, 'pagina':int(request.vars.pagina)+1})}}">Próxima ❯</a>&emsp;
+        {{pass}}
+      </div>
+    {{pass}}
+  </div><!-- /.row -->
+</section>

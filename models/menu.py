@@ -32,6 +32,7 @@ if auth.is_logged_in():
         (T('Home'), False, URL('default', 'index'), []),
         (T('News'), False, URL('default', 'novos'), []),
         (T('Friends'), False, URL('default', 'amigos'), []),
+        (T('Comunidades'), False, URL('com', 'index'), []),
     ]
 else:
     response.menu = [
