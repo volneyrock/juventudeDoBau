@@ -73,7 +73,7 @@ def nova_com():
 @auth.requires_login()
 def config():
     com = request.vars.c_id
-    form = SQLFORM(Comunidades, com, fields=['nome', 'avatar'], upload=URL('default', 'download'), showid=False)
+    form = SQLFORM(Comunidades, com, fields=['avatar', 'nome', 'descricao'], upload=URL('default', 'download'), showid=False)
     if form.process().accepted:
         response.flash = "Alterações salvas :)"
         com = db(Comunidades.nome == form.vars.nome).select(Comunidades.id).first()['id']
