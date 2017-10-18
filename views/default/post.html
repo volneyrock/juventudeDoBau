@@ -29,8 +29,9 @@
   <!-- /.box-header -->
   <div class="box-body">
     <!-- post text -->
-    {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
-    <hr>
+    {{=DIV(XML(post.corpo), _class='post-body')}} </br>
+  </div>
+  <div class="box-footer">
     <!-- Social sharing buttons -->
     <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
   </div>
@@ -52,7 +53,7 @@
                 {{pass}}
               </span>
             </span><!-- /.username -->
-        {{=DIV(MARKMIN(comment.comentario))}}
+        {{=DIV(XML(comment.comentario))}}
       </div>
       <!-- /.comment-text -->
     </div>

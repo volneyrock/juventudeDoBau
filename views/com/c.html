@@ -81,11 +81,12 @@
               </div><!-- /.box-header -->
             <div class="box-body">
               <!-- post text -->
-              {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
-              <hr>
+              {{=DIV(XML(post.corpo), _class='post-body')}} </br>
+            </div><!-- /.box-body -->
+            <div class="box-footer">
               <!-- Social sharing buttons -->
               <p>{{=LOAD('default', 'curtir.load', vars={'id':post.id, 'voto':'legal'}, ajax=True)}}</p>
-            </div><!-- /.box-body -->
+            </div>
           </div><!-- /.box -->
         {{pass}}
       </div><!-- /.col -->
