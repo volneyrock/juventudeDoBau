@@ -23,7 +23,7 @@ def c():
     # Posts
     c = db(Comunidades.id == c_id).select()
     if c[0].privada == True:
-        member = db((ComMembership.comunidade==c_id)&(ComMembership.jovem==auth.user_id)).count()
+        member = db((Comunidades.created_by==auth.user_id)|(ComMembership.comunidade==c_id)&(ComMembership.jovem==auth.user_id)).count()
         if member != 0:
             post_query = (Post.comunidade == c_id)
         else:
