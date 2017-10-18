@@ -59,11 +59,11 @@
           <div class="box box-widget collapsed-box">
             <div class="box-header with-border">
               <div class="user-block">
-                <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+                <a href="{{=URL('default', 'perfil', vars={'user_id':post.created_by.id})}}">
                   <img class="img-circle" src="{{=URL('default', 'download', args=post.created_by.avatar)}}" alt="{{=post.created_by.nome}}">
                 </a>
                 <span class="username">
-                  <a href="{{=URL('perfil', vars={'user_id':post.created_by.id})}}">
+                  <a href="{{=URL('default', 'perfil', vars={'user_id':post.created_by.id})}}">
                     {{="%(first_name)s %(last_name)s" %post.created_by}}
                   </a>
                   {{=T('digou')}}:
