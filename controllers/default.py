@@ -85,6 +85,23 @@ def novo_post():
     return dict(form=form)
 
 
+@auth.requires_login()
+def editar_post():
+    dono = db((Post.id==request.vars.post)&(Post.created_by==auth.user_id)).count()
+    if dono == 0:
+        form = DIV(XML('<h3>Você não tem permissão para isso :(</h3>'))
+    else:
+        form = SQLFORM(Post, request.vars.post,
+                        submit_button="Salvar", fields=['titulo', 'corpo',],
+                        showid=False,
+        ) # Formulário editar
+        if form.process().accepted:
+            post = db((Post.titulo==form.vars.titulo)&(Post.corpo==form.vars.corpo)).select().first()['id']
+            redirect(URL('default', 'post', args=post))
+    return dict(form=form)
+
+
+
 def post():
     post_id = request.args(0)
     post = db(Post.id == post_id).select().first()

@@ -189,6 +189,7 @@
 'Rows in Table': 'Linhas na tabela',
 'Rows selected': 'Linhas selecionadas',
 'said': 'digou',
+'Salvar': 'Salvar',
 'Semantic': 'Semântico',
 'Services': 'Serviço',
 'Sign Up': 'Cadastrar-se',

@@ -38,9 +38,10 @@
           <a class=pull-right href="{{=URL('default', 'post', args=post.post.id)}}">{{=n_comments}} comentários</a>
         </div><!-- /.user-block -->
         <div class="box-tools">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+          <button type="button" class="btn btn-box-tool" data-widget="collapse" title="Expandir"><i class="fa fa-plus"></i></button>
           {{if auth.is_logged_in() and post.post.created_by == auth.user_id:}}
-            <a href="{{=URL('default', 'deleta_post', vars={'post':post.post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete"><i class="fa fa-times"></i></a>
+            <a href="{{=URL('default', 'editar_post', vars={'post':post.post.id})}}" class="btn btn-box-tool" title="Editar"><i class="fa fa-edit"></i></a>
+            <a href="{{=URL('default', 'deleta_post', vars={'post':post.post.id, 'page':'timeline'})}}" class="btn btn-box-tool delete" title="Excluir"><i class="fa fa-times"></i></a>
           {{pass}}
         </div><!-- /.box-tools -->
       </div><!-- /.box-header -->
