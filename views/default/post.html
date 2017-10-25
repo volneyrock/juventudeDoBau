@@ -29,7 +29,7 @@
   <!-- /.box-header -->
   <div class="box-body">
     <!-- post text -->
-    {{=DIV(XML(post.corpo), _class='post-body')}} </br>
+    {{=DIV(MARKMIN(post.corpo), _class='post-body')}} </br>
   </div>
   <div class="box-footer">
     <!-- Social sharing buttons -->
@@ -53,7 +53,7 @@
                 {{pass}}
               </span>
             </span><!-- /.username -->
-        {{=DIV(XML(comment.comentario))}}
+        {{=DIV(MARKMIN(comment.comentario))}}
       </div>
       <!-- /.comment-text -->
     </div>
