@@ -105,6 +105,15 @@ def editar_post():
 def post():
     post_id = request.args(0)
     post = db(Post.id == post_id).select().first()
+
+    # Verifica se o post faz parte de uma comunidade privada
+    if post.comunidade.privada:
+        member = db((Comunidades.created_by==auth.user_id)|(ComMembership.comunidade==post.comunidade.id)&(ComMembership.jovem==auth.user_id)).count()
+        if member != 0:
+            pass
+        else:
+            post = None
+
     comments = db(Comments.post == post_id).select()
     form = SQLFORM(Comments, submit_button="Comentar", fields=['comentario']) # Formulário comentar
     form.vars.post = post_id
@@ -136,6 +145,7 @@ def perfil():
         pagina = int(request.vars.pagina)
     except TypeError:
         redirect(URL('default', 'perfil', vars={'pagina':1, 'user_id':user_id}))
+
     user = db(db.auth_user.id==user_id).select()
     query = (Post.created_by==user_id)
     myposts = consultaComPaginacao(
@@ -144,6 +154,7 @@ def perfil():
                     paginacao=10,
                     filtros={'orderby':~Post.pontos|~Post.created_on},
                 )
+                
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
 

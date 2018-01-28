@@ -1,5 +1,6 @@
 {{extend 'top-nav.html'}}
 <br>
+{{if post is not None:}}
 <!-- Box Comment -->
 <div class="box box-widget">
   <div class="box-header with-border">
@@ -81,3 +82,7 @@
   <!-- /.box-footer -->
 </div>
 <!-- /.box -->
+{{else:}}
+<h3>Ops</h3>
+<h4>Este post não existe, ou você não tem permissão para visualizá-lo :(</h4>
+{{pass}}
