@@ -1,52 +1,59 @@
 {{extend 'top-nav.html'}}
 
 {{=form}}
+<div class="row">
+    <div class="col-md-12 offset-md-6">
+      <h4 style="color: red">*Você precisa fazer parte de alguma comunidade para poder postar</h4>    
+    </div>
+</div>
 <br>
 <hr>
 <h2>Ajuda de formatação</h2>
-<table>
-  <thead>
-    <tr class="first"><td><strong>CÓDIGO</strong></td><td><strong>SAÍDA</strong></td></tr>
-  </thead>
-  <tbody>
-    <tr class="first">
-      <td><code># título</code></td><td><strong>título</strong></td>
-    </tr>
-    <tr class="even">
-      <td><code>## section</code></td><td><strong>section</strong></td>
-    </tr>
-    <tr>
-      <td><code>### subsection</code></td><td><strong>subsection</strong></td>
-    </tr>
-    <tr class="even">
-      <td><code>**negrito**</code></td><td><strong>negrito</strong></td>
-    </tr>
-    <tr>
-      <td><code>''itálico''</code></td><td><em>itálico</em></td>
-    </tr>
-    <tr class="even">
-      <td><code>~~riscado~~</code></td><td><del>riscado</del></td>
-    </tr>
-    <tr>
-      <td><code>``verbatim``</code></td><td><code>verbatim</code></td>
-    </tr>
-    <tr class="even">
-      <td><code>``colorido com **negrito**``:red</code></td><td><span style="color: red">colorido com <strong>negrito</strong></span></td>
-    </tr>
-    <tr>
-      <td><code>``many colors``:color[blue:#ffff00]</code></td><td><span style="color: blue;background-color: #ffff00;">many colors</span></td>
-    </tr>
-    <tr class="even">
-      <td><code>http://google.com</code></td><td><a href="http://google.com">http://google.com</a></td>
-    </tr>
-    <tr>
-      <td><code>[[**click** me #meulink popup]]</code></td><td><a href="#markmin_myanchor"><strong>click</strong> me</a></td>
-    </tr>
-    <tr class="even">
-      <td><code>[[click me [mensagem] #meulink popup]]</code></td><td><a href="#markmin_myanchor" title="mensagem" target="_blank">click me</a></td>
-    </tr>
-  </tbody>
-</table>
+<div class="table-responsive">
+    <table>
+        <thead>
+          <tr class="first"><td><strong>CÓDIGO</strong></td><td><strong>SAÍDA</strong></td></tr>
+        </thead>
+        <tbody>
+          <tr class="first">
+            <td><code># título</code></td><td><strong>título</strong></td>
+          </tr>
+          <tr class="even">
+            <td><code>## section</code></td><td><strong>section</strong></td>
+          </tr>
+          <tr>
+            <td><code>### subsection</code></td><td><strong>subsection</strong></td>
+          </tr>
+          <tr class="even">
+            <td><code>**negrito**</code></td><td><strong>negrito</strong></td>
+          </tr>
+          <tr>
+            <td><code>''itálico''</code></td><td><em>itálico</em></td>
+          </tr>
+          <tr class="even">
+            <td><code>~~riscado~~</code></td><td><del>riscado</del></td>
+          </tr>
+          <tr>
+            <td><code>``verbatim``</code></td><td><code>verbatim</code></td>
+          </tr>
+          <tr class="even">
+            <td><code>``colorido com **negrito**``:red</code></td><td><span style="color: red">colorido com <strong>negrito</strong></span></td>
+          </tr>
+          <tr>
+            <td><code>``many colors``:color[blue:#ffff00]</code></td><td><span style="color: blue;background-color: #ffff00;">many colors</span></td>
+          </tr>
+          <tr class="even">
+            <td><code>http://google.com</code></td><td><a href="http://google.com">http://google.com</a></td>
+          </tr>
+          <tr>
+            <td><code>[[**click** me #meulink popup]]</code></td><td><a href="#markmin_myanchor"><strong>click</strong> me</a></td>
+          </tr>
+          <tr class="even">
+            <td><code>[[click me [mensagem] #meulink popup]]</code></td><td><a href="#markmin_myanchor" title="mensagem" target="_blank">click me</a></td>
+          </tr>
+        </tbody>
+      </table>
+</div>
 <h3>Adicionar imagem:</h3>
 <p>[[descrição http://.../image.png right 200px]]</p>
 <h3>Adicionar vídeo:</h3>
@@ -55,7 +62,18 @@
 <p>qr:http://www.google.com</p>
 
 
-
+<script>
+  $(document).ready(function(){
+    var comunidade = $('#post_comunidade').children(':selected').text();
+    console.log(comunidade);
+    if(comunidade == "Escolha uma comunidade"){$('#btn-postar').attr('disabled', 'disabled');}
+    $("#post_comunidade").change(function(){
+      var comunidade = $(this).children(':selected').text();
+      if(comunidade == "Escolha uma comunidade"){$("#btn-postar").attr('disabled', 'disabled');}
+      else{$("#btn-postar").removeAttr('disabled');}
+    })
+  })
+</script>
 <!-- <script src="{{=URL('static', 'juventude/bower_components/ckeditor/ckeditor.js')}}"></script>
 <script>
   $(function () {

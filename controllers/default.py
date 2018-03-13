@@ -29,10 +29,6 @@ def timeline():
     except TypeError:
         redirect(URL('default', 'timeline', vars={'pagina':1}))
 
-    form = SQLFORM(Post, submit_button="Postar") # Formulário postar
-    if form.process().accepted:
-        response.flash = "Mensagem postada com sucesso :)"
-
     query = ((Post.comunidade==Comunidades.id)&(Comunidades.privada != True))
     posts = consultaComPaginacao(
                     consulta=db(query),
@@ -47,7 +43,7 @@ def timeline():
     comentarios =  db(Post.id==Comments.post).select(Post.id)
     votos = set([i.post for i in db(Reacts.jovem==auth.user_id).select(Reacts.post)])
 
-    return dict(form=form, posts=posts, comentarios=comentarios, votos=votos)
+    return dict(posts=posts, comentarios=comentarios, votos=votos)
 
 
 def novos():
@@ -77,6 +73,7 @@ def novos():
 @auth.requires_login()
 def novo_post():
     form = SQLFORM(Post, submit_button="Postar", fields=['titulo', 'corpo', 'comunidade']) # Formulário postar
+    form.element('input[type=submit]')['_id'] = 'btn-postar'
     if request.vars.c_id:
         form.vars.comunidade = request.vars.c_id
     if form.process().accepted:
